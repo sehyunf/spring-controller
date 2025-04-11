@@ -1,6 +1,7 @@
 package com.app.controller.controller;
 
 import com.app.controller.domain.MemberVO;
+import com.app.controller.domain.ProductVO;
 import com.app.controller.mapper.MemberMapper;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +49,7 @@ public class MemberController {
         Optional<MemberVO> foundMember = memberMapper.select(memberVO);
         if(foundMember.isPresent()){
             session.setAttribute("member", foundMember.get());
+            session.setAttribute("product", new ProductVO());
             return new RedirectView("/post/list");
         }
 
@@ -57,6 +59,14 @@ public class MemberController {
 //        session이 과부화 되므로, session에 flash 영역을 사용하여
 //        화면으로 상태 값을 보내고, new Request가 되면 session에 flash 값이 새로 주입되며 기존 flash 값이 사라진다.
 //        따라서 과부화의 부담이 줄어든다.
+        return new RedirectView("/member/login");
+    }
+
+//    로그아웃
+    @GetMapping("logout")
+    public RedirectView logout() {
+//        session.removeAttribute("member");
+        session.invalidate();
         return new RedirectView("/member/login");
     }
 
